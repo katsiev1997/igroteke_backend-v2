@@ -60,7 +60,7 @@ const reserveCtrl = {
   },
   delete: async (req, res) => {
     try {
-      const { customerData, clubId, roomNum } = req.body;
+      const { bookingId, clubId, roomNum } = req.body;
       let { from, to } = req.body;
       const club = await Club.findById(clubId);
       if (!club) {
@@ -73,10 +73,10 @@ const reserveCtrl = {
         for (let i = from; i < to; i++) {
           club.rooms[room].availableTimeSlots[i] = true;
         }
-        const bookingIndex = club.rooms[roomNum].bookings.findIndex(
-          (booking) => booking.customerData === customerData
+        const bookingIndex = club.rooms[room].bookings.findIndex(
+          (booking) => booking._id === bookingId
         );
-        club.rooms[roomNum].bookings.splice(bookingIndex, 1);
+        club.rooms[room].bookings.splice(bookingIndex, 1);
         await club.save();
         return res.status(200).json({ message: 'Бронь успешно удалена' });
       }

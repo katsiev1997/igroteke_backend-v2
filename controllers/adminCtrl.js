@@ -38,7 +38,7 @@ const adminCtrl = {
         });
         return res.status(200).json({
           message: 'Вы успешно зарегистрировались!',
-          club: { name: club.name, phone: club.phone},
+          club: { name: club.name, phone: club.phone },
         });
       }
     } catch (error) {
@@ -70,7 +70,10 @@ const adminCtrl = {
           });
           return res.status(200).json({
             message: 'Вы успешно авторизовались!',
-            clubId: admin.clubId,
+            admin: {
+              clubId: admin.clubId,
+              phone: admin.phone,
+            },
             token: access_token,
           });
         } else {
@@ -115,7 +118,11 @@ const adminCtrl = {
           const access_token = createAccessToken({ id: result.id });
           return res.json({
             token: access_token,
-            clubId: admin.clubId,
+            admin: {
+              clubId: admin.clubId,
+              phone: admin.phone,
+            },
+            message: 'Вы авторизованы'
           });
         }
       );
