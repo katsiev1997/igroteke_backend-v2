@@ -61,21 +61,20 @@ const reserveCtrl = {
   delete: async (req, res) => {
     try {
       const { bookingId, clubId, roomNum } = req.body;
-      let { from, to } = req.body;
       const club = await Club.findById(clubId);
       if (!club) {
         return res.status(404).json({ message: 'Неверные данные клуба!' });
       } else {
-        from = Number(from);
-        to = Number(to) + 1;
         const room = Number(roomNum);
-
-        for (let i = from; i < to; i++) {
-          club.rooms[room].availableTimeSlots[i] = true;
-        }
         const bookingIndex = club.rooms[room].bookings.findIndex(
           (booking) => booking._id === bookingId
         );
+        let { from, to } = club.rooms[room].bookings[bookingIndex];
+        from = Number(from);
+        to = Number(to);
+        for (let i = from; i < to; i++) {
+          club.rooms[room].availableTimeSlots[i] = true;
+        }
         club.rooms[room].bookings.splice(bookingIndex, 1);
         await club.save();
         return res.status(200).json({ message: 'Бронь успешно удалена' });

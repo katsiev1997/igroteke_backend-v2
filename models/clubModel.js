@@ -48,6 +48,7 @@ const clubSchema = new mongoose.Schema({
         },
         bookings: [
           {
+            _id: String,
             customerData: String,
             roomName: String,
             from: Number,
